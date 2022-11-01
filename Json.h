@@ -7,6 +7,10 @@
 #ifndef JSON_H
 #define JSON_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //------------------------------------------------------------------------------
 // Includes
 
@@ -81,6 +85,10 @@ JsonError JsonParse(const char **const json);
 void JsonPrint(const char *json);
 
 const char *JsonErrorToString(const JsonError error);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
