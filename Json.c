@@ -337,7 +337,7 @@ static JsonError ParseHexEscapeSequence(const char **const json, char *const des
     }
     char string[5];
     snprintf(string, sizeof(string), "%s", *json + 2);
-    int value;
+    unsigned int value;
     if (sscanf(string, "%x", &value) != 1) {
         return JsonErrorUnableToParseStringHexEscapeSequence;
     }
