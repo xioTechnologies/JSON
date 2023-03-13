@@ -75,7 +75,6 @@ JsonError JsonParseType(const char **const json, JsonType *const type) {
         default:
             return JsonErrorInvalidSyntax;
     }
-    return JsonErrorOK;
 }
 
 /**
@@ -342,7 +341,7 @@ static JsonError ParseHexEscapeSequence(const char **const json, char *const des
     if (sscanf(string, "%x", &value) != 1) {
         return JsonErrorUnableToParseStringHexEscapeSequence;
     }
-    WriteToDestination(destination, index, value);
+    WriteToDestination(destination, index, (char) value);
     (*json) += 6;
     return JsonErrorOK;
 }
