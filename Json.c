@@ -23,7 +23,7 @@ static JsonError ParseEscapeSequence(const char **const json, char *const destin
 
 static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, int *const index);
 
-static void WriteToDestination(char *const destination, int *const index, const char character);
+static void WriteToDestination(char *const destination, unsigned int *const index, const char character);
 
 static JsonError ParseValue(const char **const json, const bool print, int *const indent);
 
@@ -353,7 +353,7 @@ static JsonError ParseHexEscapeSequence(const char **const json, char *const des
  * @param index Index.
  * @param character Character.
  */
-static void WriteToDestination(char *const destination, int *const index, const char character) {
+static void WriteToDestination(char *const destination, unsigned int *const index, const char character) {
     if (destination != NULL) {
         destination[(*index)++] = character;
     }
