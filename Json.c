@@ -249,7 +249,7 @@ JsonError JsonParseString(const char **const json, char *const destination, cons
         if (**json == '\0') {
             return JsonErrorMissingStringEnd;
         }
-        if ((**json < 0) || (isprint(**json) == 0)) {
+        if ((**json < 0) || (isprint((int) **json) == 0)) {
             return JsonErrorInvalidStringCharacter;
         }
         if (**json == '\\') {
@@ -323,16 +323,16 @@ static JsonError ParseEscapeSequence(const char **const json, char *const destin
  * @return JSON error.
  */
 static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, unsigned int *const index) {
-    if (isxdigit(*(*json + 2)) == 0) {
+    if (isxdigit((int) *(*json + 2)) == 0) {
         return JsonErrorInvalidStringHexEscapeSequence;
     }
-    if (isxdigit(*(*json + 3)) == 0) {
+    if (isxdigit((int) *(*json + 3)) == 0) {
         return JsonErrorInvalidStringHexEscapeSequence;
     }
-    if (isxdigit(*(*json + 4)) == 0) {
+    if (isxdigit((int) *(*json + 4)) == 0) {
         return JsonErrorInvalidStringHexEscapeSequence;
     }
-    if (isxdigit(*(*json + 5)) == 0) {
+    if (isxdigit((int) *(*json + 5)) == 0) {
         return JsonErrorInvalidStringHexEscapeSequence;
     }
     char string[5];
@@ -378,7 +378,7 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
     const char *jsonCopy = *json;
     if (*jsonCopy == '-') {
         jsonCopy++;
-        if (isdigit(*jsonCopy) == 0) { // minus sign must be followed by digit
+        if (isdigit((int) *jsonCopy) == 0) { // minus sign must be followed by digit
             return JsonErrorInvalidNumberFormat;
         }
     }
@@ -392,18 +392,18 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
     }
 
     // Parse integer
-    while (isdigit(*jsonCopy) != 0) {
+    while (isdigit((int) *jsonCopy) != 0) {
         jsonCopy++;
     }
 
     // Parse fraction
     if (*jsonCopy == '.') {
         jsonCopy++;
-        if (isdigit(*jsonCopy) == 0) { // decimal point must be followed by digit
+        if (isdigit((int) *jsonCopy) == 0) { // decimal point must be followed by digit
             return JsonErrorInvalidNumberFormat;
         }
     }
-    while (isdigit(*jsonCopy) != 0) {
+    while (isdigit((int) *jsonCopy) != 0) {
         jsonCopy++;
     }
 
@@ -413,11 +413,11 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
         if ((*jsonCopy == '+') || (*jsonCopy == '-')) {
             jsonCopy++;
         }
-        if (isdigit(*jsonCopy) == 0) { // exponent must be followed by digit
+        if (isdigit((int) *jsonCopy) == 0) { // exponent must be followed by digit
             return JsonErrorInvalidNumberFormat;
         }
     }
-    while (isdigit(*jsonCopy) != 0) {
+    while (isdigit((int) *jsonCopy) != 0) {
         jsonCopy++;
     }
 
