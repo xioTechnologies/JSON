@@ -241,7 +241,7 @@ JsonError JsonParseString(const char **const json, char *const destination, cons
     (*json)++;
 
     // Parse string
-    int index = 0;
+    unsigned int index = 0;
     while (true) {
         if ((destination != NULL) && (index >= destinationSize)) {
             return JsonErrorStringTooLong;
