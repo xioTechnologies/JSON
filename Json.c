@@ -19,11 +19,11 @@ static void SkipWhiteSpace(const char **const json);
 
 static JsonError CheckType(const char **const json, const JsonType expectedType);
 
-static JsonError ParseEscapeSequence(const char **const json, char *const destination, int *const index);
+static JsonError ParseEscapeSequence(const char **const json, char *const destination, unsigned int *const index);
 
-static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, int *const index);
+static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, unsigned int *const index);
 
-static void WriteToDestination(char *const destination, int *const index, const char character);
+static void WriteToDestination(char *const destination, unsigned int *const index, const char character);
 
 static JsonError ParseValue(const char **const json, const bool print, int *const indent);
 
@@ -75,7 +75,6 @@ JsonError JsonParseType(const char **const json, JsonType *const type) {
         default:
             return JsonErrorInvalidSyntax;
     }
-    return JsonErrorOK;
 }
 
 /**
@@ -242,7 +241,7 @@ JsonError JsonParseString(const char **const json, char *const destination, cons
     (*json)++;
 
     // Parse string
-    int index = 0;
+    unsigned int index = 0;
     while (true) {
         if ((destination != NULL) && (index >= destinationSize)) {
             return JsonErrorStringTooLong;
@@ -250,7 +249,7 @@ JsonError JsonParseString(const char **const json, char *const destination, cons
         if (**json == '\0') {
             return JsonErrorMissingStringEnd;
         }
-        if ((**json < 0) || (isprint(**json) == 0)) {
+        if ((**json < 0) || (isprint((int) **json) == 0)) {
             return JsonErrorInvalidStringCharacter;
         }
         if (**json == '\\') {
@@ -280,7 +279,7 @@ JsonError JsonParseString(const char **const json, char *const destination, cons
  * @param index Index.
  * @return JSON error.
  */
-static JsonError ParseEscapeSequence(const char **const json, char *const destination, int *const index) {
+static JsonError ParseEscapeSequence(const char **const json, char *const destination, unsigned int *const index) {
     switch (*(*json + 1)) {
         case '\"':
             WriteToDestination(destination, index, '"');
@@ -323,26 +322,26 @@ static JsonError ParseEscapeSequence(const char **const json, char *const destin
  * @param index Index.
  * @return JSON error.
  */
-static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, int *const index) {
-    if (isxdigit(*(*json + 2)) == 0) {
+static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, unsigned int *const index) {
+    if (isxdigit((int) *(*json + 2)) == 0) {
         return JsonErrorInvalidStringHexEscapeSequence;
     }
-    if (isxdigit(*(*json + 3)) == 0) {
+    if (isxdigit((int) *(*json + 3)) == 0) {
         return JsonErrorInvalidStringHexEscapeSequence;
     }
-    if (isxdigit(*(*json + 4)) == 0) {
+    if (isxdigit((int) *(*json + 4)) == 0) {
         return JsonErrorInvalidStringHexEscapeSequence;
     }
-    if (isxdigit(*(*json + 5)) == 0) {
+    if (isxdigit((int) *(*json + 5)) == 0) {
         return JsonErrorInvalidStringHexEscapeSequence;
     }
     char string[5];
     snprintf(string, sizeof(string), "%s", *json + 2);
-    int value;
+    unsigned int value;
     if (sscanf(string, "%x", &value) != 1) {
         return JsonErrorUnableToParseStringHexEscapeSequence;
     }
-    WriteToDestination(destination, index, value);
+    WriteToDestination(destination, index, (char) value);
     (*json) += 6;
     return JsonErrorOK;
 }
@@ -354,7 +353,7 @@ static JsonError ParseHexEscapeSequence(const char **const json, char *const des
  * @param index Index.
  * @param character Character.
  */
-static void WriteToDestination(char *const destination, int *const index, const char character) {
+static void WriteToDestination(char *const destination, unsigned int *const index, const char character) {
     if (destination != NULL) {
         destination[(*index)++] = character;
     }
@@ -379,7 +378,7 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
     const char *jsonCopy = *json;
     if (*jsonCopy == '-') {
         jsonCopy++;
-        if (isdigit(*jsonCopy) == 0) { // minus sign must be followed by digit
+        if (isdigit((int) *jsonCopy) == 0) { // minus sign must be followed by digit
             return JsonErrorInvalidNumberFormat;
         }
     }
@@ -393,18 +392,18 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
     }
 
     // Parse integer
-    while (isdigit(*jsonCopy) != 0) {
+    while (isdigit((int) *jsonCopy) != 0) {
         jsonCopy++;
     }
 
     // Parse fraction
     if (*jsonCopy == '.') {
         jsonCopy++;
-        if (isdigit(*jsonCopy) == 0) { // decimal point must be followed by digit
+        if (isdigit((int) *jsonCopy) == 0) { // decimal point must be followed by digit
             return JsonErrorInvalidNumberFormat;
         }
     }
-    while (isdigit(*jsonCopy) != 0) {
+    while (isdigit((int) *jsonCopy) != 0) {
         jsonCopy++;
     }
 
@@ -414,11 +413,11 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
         if ((*jsonCopy == '+') || (*jsonCopy == '-')) {
             jsonCopy++;
         }
-        if (isdigit(*jsonCopy) == 0) { // exponent must be followed by digit
+        if (isdigit((int) *jsonCopy) == 0) { // exponent must be followed by digit
             return JsonErrorInvalidNumberFormat;
         }
     }
-    while (isdigit(*jsonCopy) != 0) {
+    while (isdigit((int) *jsonCopy) != 0) {
         jsonCopy++;
     }
 
