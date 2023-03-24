@@ -510,12 +510,12 @@ JsonError JsonParse(const char **const json) {
 
 /**
  * @brief Prints the JSON structure and error message.
- * @param json JSON pointer.
+ * @param json_ JSON pointer.
  */
-void JsonPrint(const char *json) {
+void JsonPrint(const char *json_) {
     int indent = 0;
-    const char **const jsonPointer = &json;
-    const JsonError error = ParseValue(jsonPointer, true, &indent);
+    const char **const json = &json_;
+    const JsonError error = ParseValue(json, true, &indent);
     printf("%s\r\n", JsonErrorToString(error));
 }
 
@@ -726,7 +726,7 @@ const char *JsonErrorToString(const JsonError error) {
         case JsonErrorUnableToParseNumber:
             return "Unable to parse number";
     }
-    return "Unknown error";
+    return ""; // avoid compiler warning
 }
 
 //------------------------------------------------------------------------------
