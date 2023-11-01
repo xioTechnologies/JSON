@@ -516,7 +516,7 @@ void JsonPrint(const char *json_) {
     int indent = 0;
     const char **const json = &json_;
     const JsonError error = ParseValue(json, true, &indent);
-    printf("%s\r\n", JsonErrorToString(error));
+    printf("%s\n", JsonErrorToString(error));
 }
 
 /**
@@ -541,22 +541,22 @@ static JsonError ParseValue(const char **const json, const bool print, int *cons
         const int actualIndent = 4 * *indent;
         switch (type) {
             case JsonTypeString:
-                printf("%*sstring\r\n", actualIndent, "");
+                printf("%*sstring\n", actualIndent, "");
                 break;
             case JsonTypeNumber:
-                printf("%*snumber\r\n", actualIndent, "");
+                printf("%*snumber\n", actualIndent, "");
                 break;
             case JsonTypeObject:
-                printf("%*sobject\r\n", actualIndent, "");
+                printf("%*sobject\n", actualIndent, "");
                 break;
             case JsonTypeArray:
-                printf("%*sarray\r\n", actualIndent, "");
+                printf("%*sarray\n", actualIndent, "");
                 break;
             case JsonTypeBoolean:
-                printf("%*sboolean\r\n", actualIndent, "");
+                printf("%*sboolean\n", actualIndent, "");
                 break;
             case JsonTypeNull:
-                printf("%*snull\r\n", actualIndent, "");
+                printf("%*snull\n", actualIndent, "");
                 break;
         }
     }

@@ -146,13 +146,13 @@ int JsonTest() {
     TestParseDefinedObjectOfAllTypes();
     TestParseDefinedObjectError();
     TestParsePartial();
-    printf("Passed %u, Failed %u\r\n", passCount, failCount);
+    printf("Passed %u, Failed %u\n", passCount, failCount);
     return failCount == 0 ? 0 : 1;
 }
 
 static void Assert(const int result, const char *const message) {
     if (result != 0) {
-        printf("Failed. %s\r\n", message);
+        printf("Failed. %s\n", message);
         failCount++;
     } else {
         passCount++;
