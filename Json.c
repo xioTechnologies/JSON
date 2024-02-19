@@ -10,7 +10,7 @@
 #include <ctype.h> // isdigit, isprint, isxdigit
 #include "Json.h"
 #include <stdio.h> // printf, snprintf, sscanf
-#include <string.h> // strcmp
+#include <string.h> // strncmp
 
 //------------------------------------------------------------------------------
 // Function declarations
@@ -537,7 +537,7 @@ static JsonError ParseValue(const char **const json, const bool print, int *cons
     }
 
     // Print value type
-    if (print == true) {
+    if (print) {
         const int actualIndent = 4 * *indent;
         switch (type) {
             case JsonTypeString:
