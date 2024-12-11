@@ -201,7 +201,6 @@ JsonError JsonParseComma(const char **const json) {
  * @return JSON error.
  */
 JsonError JsonParseKey(const char **const json, char *const destination, const size_t destinationSize) {
-
     // Check type
     if (CheckType(json, JsonTypeString) != JsonErrorOK) {
         return JsonErrorMissingKey;
@@ -232,7 +231,6 @@ JsonError JsonParseKey(const char **const json, char *const destination, const s
  * @return JSON error.
  */
 JsonError JsonParseString(const char **const json, char *const destination, const size_t destinationSize, size_t *const numberOfBytes) {
-
     // Check type
     JsonError error = CheckType(json, JsonTypeString);
     if (error != JsonErrorOK) {
@@ -367,7 +365,6 @@ static void WriteToDestination(char *const destination, unsigned int *const inde
  * @return JSON error.
  */
 JsonError JsonParseNumber(const char **const json, float *const number) {
-
     // Check type
     const JsonError error = CheckType(json, JsonTypeNumber);
     if (error != JsonErrorOK) {
@@ -378,16 +375,16 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
     const char *jsonCopy = *json;
     if (*jsonCopy == '-') {
         jsonCopy++;
-        if (isdigit((int) *jsonCopy) == 0) { // minus sign must be followed by digit
-            return JsonErrorInvalidNumberFormat;
+        if (isdigit((int) *jsonCopy) == 0) {
+            return JsonErrorInvalidNumberFormat; // minus sign must be followed by digit
         }
     }
 
     // Parse first zero
     if (*jsonCopy == '0') {
         jsonCopy++;
-        if (*jsonCopy == '0') { // leading zeros are invalid
-            return JsonErrorInvalidNumberFormat;
+        if (*jsonCopy == '0') {
+            return JsonErrorInvalidNumberFormat; // leading zeros are invalid
         }
     }
 
@@ -399,8 +396,8 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
     // Parse fraction
     if (*jsonCopy == '.') {
         jsonCopy++;
-        if (isdigit((int) *jsonCopy) == 0) { // decimal point must be followed by digit
-            return JsonErrorInvalidNumberFormat;
+        if (isdigit((int) *jsonCopy) == 0) {
+            return JsonErrorInvalidNumberFormat; // decimal point must be followed by digit
         }
     }
     while (isdigit((int) *jsonCopy) != 0) {
@@ -413,8 +410,8 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
         if ((*jsonCopy == '+') || (*jsonCopy == '-')) {
             jsonCopy++;
         }
-        if (isdigit((int) *jsonCopy) == 0) { // exponent must be followed by digit
-            return JsonErrorInvalidNumberFormat;
+        if (isdigit((int) *jsonCopy) == 0) {
+            return JsonErrorInvalidNumberFormat; // exponent must be followed by digit
         }
     }
     while (isdigit((int) *jsonCopy) != 0) {
@@ -445,7 +442,6 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
  * @return JSON error.
  */
 JsonError JsonParseBoolean(const char **const json, bool *const boolean) {
-
     // Check type
     const JsonError error = CheckType(json, JsonTypeBoolean);
     if (error != JsonErrorOK) {
@@ -481,7 +477,6 @@ JsonError JsonParseBoolean(const char **const json, bool *const boolean) {
  * @return JSON error.
  */
 JsonError JsonParseNull(const char **const json) {
-
     // Check type
     const JsonError error = CheckType(json, JsonTypeNull);
     if (error != JsonErrorOK) {
@@ -528,7 +523,6 @@ void JsonPrint(const char *json_) {
  * @return JSON error.
  */
 static JsonError ParseValue(const char **const json, const bool print, int *const indent) {
-
     // Parse value type
     JsonType type;
     const JsonError error = JsonParseType(json, &type);
@@ -588,7 +582,6 @@ static JsonError ParseValue(const char **const json, const bool print, int *cons
  * @return JSON error.
  */
 static JsonError ParseObject(const char **const json, const bool print, int *const indent) {
-
     // Parse object start
     JsonError error = JsonParseObjectStart(json);
     if (error != JsonErrorOK) {
@@ -604,7 +597,6 @@ static JsonError ParseObject(const char **const json, const bool print, int *con
     // Loop through each key/value pair
     (*indent)++;
     while (true) {
-
         // Parse key
         char key[64];
         error = JsonParseKey(json, key, sizeof(key));
@@ -644,7 +636,6 @@ static JsonError ParseObject(const char **const json, const bool print, int *con
  * @return JSON error.
  */
 static JsonError ParseArray(const char **const json, const bool print, int *const indent) {
-
     // Parse array start
     JsonError error = JsonParseArrayStart(json);
     if (error != JsonErrorOK) {
@@ -660,7 +651,6 @@ static JsonError ParseArray(const char **const json, const bool print, int *cons
     // Loop through each value
     (*indent)++;
     while (true) {
-
         // Parse value
         error = ParseValue(json, print, indent);
         if (error != JsonErrorOK) {

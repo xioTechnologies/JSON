@@ -936,7 +936,6 @@ static int CheckParseDefinedObjectError(const char *json, const JsonError expect
     const char **const jsonPointer = &json;
     JsonError error;
     while (true) {
-
         // {
         error = JsonParseObjectStart(jsonPointer);
         if (error != JsonErrorOK) {
