@@ -7,7 +7,7 @@
 //------------------------------------------------------------------------------
 // Includes
 
-#include <ctype.h> // isdigit, isprint, isxdigit
+#include <ctype.h> // isdigit, isxdigit
 #include "Json.h"
 #include <stdio.h> // printf, snprintf, sscanf
 #include <string.h> // strncmp
@@ -85,9 +85,9 @@ static void SkipWhiteSpace(const char **const json) {
     while (true) {
         switch (**json) {
             case ' ':
+            case '\t':
             case '\n':
             case '\r':
-            case '\t':
                 (*json)++;
                 break;
             default:
@@ -247,8 +247,8 @@ JsonError JsonParseString(const char **const json, char *const destination, cons
         if (**json == '\0') {
             return JsonErrorMissingStringEnd;
         }
-        if ((**json < 0) || (isprint((int) **json) == 0)) {
-            return JsonErrorInvalidStringCharacter;
+        if ((**json >= 0) && (**json < 0x20)) {
+            return JsonErrorInvalidStringCharacter; // control charcaters must be escaped
         }
         if (**json == '\\') {
             error = ParseEscapeSequence(json, destination, &index);

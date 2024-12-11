@@ -19,7 +19,7 @@
 /**
  * @brief Whitespace.
  */
-#define WS " \n\r\t \n\r\t"
+#define WS " \t\n\r \t\n\r"
 
 //------------------------------------------------------------------------------
 // Function declarations
@@ -220,7 +220,12 @@ static int CheckTestParseTypeError(const char *json, const JsonError expectedErr
 }
 
 static void TestParseString() {
-    Assert(CheckParseString("\" !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~\"", " !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~", 94), "Parse string all valid characters");
+    Assert(CheckParseString("\" !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~\"",
+                            " !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+                            94), "Parse string valid characters <0x7F");
+    Assert(CheckParseString("\"\x7E\x7F\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F\xA0\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF\xB0\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF\"",
+                            "\x7E\x7F\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F\xA0\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF\xB0\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF",
+                            131), "Parse string valid characters >0x7E");
     Assert(CheckParseString("\" \\\" \\\\ \\/ \\b \\f \\n \\r \\t \"", " \" \\ / \b \f \n \r \t ", 18), "Parse string non hex escape sequences");
     Assert(CheckParseString("\" \\u0041\\u0042\\u0043 \"", " ABC ", 6), "Parse string hex escape sequences for valid characters");
     Assert(CheckParseString("\" \\u004a\\u004b\\u004c \"", " JKL ", 6), "Parse string hex escape sequences lower");
@@ -231,7 +236,7 @@ static void TestParseString() {
 }
 
 static int CheckParseString(const char *json, const char *const expectedString, const size_t expectedStringSize) {
-    char string[128];
+    char string[256];
     size_t stringSize;
     if (JsonParseString(&json, string, sizeof(string), &stringSize) != JsonErrorOK) {
         return 1;
@@ -281,135 +286,6 @@ static void TestParseStringError() {
     Assert(CheckParseStringError("\"\x1D\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x1D");
     Assert(CheckParseStringError("\"\x1E\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x1E");
     Assert(CheckParseStringError("\"\x1F\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x1F");
-    Assert(CheckParseStringError("\"\x7F\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x7F");
-    Assert(CheckParseStringError("\"\x80\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x80");
-    Assert(CheckParseStringError("\"\x81\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x81");
-    Assert(CheckParseStringError("\"\x82\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x82");
-    Assert(CheckParseStringError("\"\x83\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x83");
-    Assert(CheckParseStringError("\"\x84\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x84");
-    Assert(CheckParseStringError("\"\x85\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x85");
-    Assert(CheckParseStringError("\"\x86\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x86");
-    Assert(CheckParseStringError("\"\x87\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x87");
-    Assert(CheckParseStringError("\"\x88\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x88");
-    Assert(CheckParseStringError("\"\x89\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x89");
-    Assert(CheckParseStringError("\"\x8A\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x8A");
-    Assert(CheckParseStringError("\"\x8B\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x8B");
-    Assert(CheckParseStringError("\"\x8C\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x8C");
-    Assert(CheckParseStringError("\"\x8D\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x8D");
-    Assert(CheckParseStringError("\"\x8E\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x8E");
-    Assert(CheckParseStringError("\"\x8F\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x8F");
-    Assert(CheckParseStringError("\"\x90\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x90");
-    Assert(CheckParseStringError("\"\x91\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x91");
-    Assert(CheckParseStringError("\"\x92\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x92");
-    Assert(CheckParseStringError("\"\x93\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x93");
-    Assert(CheckParseStringError("\"\x94\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x94");
-    Assert(CheckParseStringError("\"\x95\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x95");
-    Assert(CheckParseStringError("\"\x96\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x96");
-    Assert(CheckParseStringError("\"\x97\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x97");
-    Assert(CheckParseStringError("\"\x98\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x98");
-    Assert(CheckParseStringError("\"\x99\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x99");
-    Assert(CheckParseStringError("\"\x9A\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x9A");
-    Assert(CheckParseStringError("\"\x9B\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x9B");
-    Assert(CheckParseStringError("\"\x9C\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x9C");
-    Assert(CheckParseStringError("\"\x9D\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x9D");
-    Assert(CheckParseStringError("\"\x9E\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x9E");
-    Assert(CheckParseStringError("\"\x9F\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\x9F");
-    Assert(CheckParseStringError("\"\xA0\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA0");
-    Assert(CheckParseStringError("\"\xA1\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA1");
-    Assert(CheckParseStringError("\"\xA2\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA2");
-    Assert(CheckParseStringError("\"\xA3\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA3");
-    Assert(CheckParseStringError("\"\xA4\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA4");
-    Assert(CheckParseStringError("\"\xA5\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA5");
-    Assert(CheckParseStringError("\"\xA6\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA6");
-    Assert(CheckParseStringError("\"\xA7\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA7");
-    Assert(CheckParseStringError("\"\xA8\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA8");
-    Assert(CheckParseStringError("\"\xA9\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xA9");
-    Assert(CheckParseStringError("\"\xAA\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xAA");
-    Assert(CheckParseStringError("\"\xAB\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xAB");
-    Assert(CheckParseStringError("\"\xAC\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xAC");
-    Assert(CheckParseStringError("\"\xAD\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xAD");
-    Assert(CheckParseStringError("\"\xAE\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xAE");
-    Assert(CheckParseStringError("\"\xAF\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xAF");
-    Assert(CheckParseStringError("\"\xB0\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB0");
-    Assert(CheckParseStringError("\"\xB1\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB1");
-    Assert(CheckParseStringError("\"\xB2\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB2");
-    Assert(CheckParseStringError("\"\xB3\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB3");
-    Assert(CheckParseStringError("\"\xB4\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB4");
-    Assert(CheckParseStringError("\"\xB5\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB5");
-    Assert(CheckParseStringError("\"\xB6\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB6");
-    Assert(CheckParseStringError("\"\xB7\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB7");
-    Assert(CheckParseStringError("\"\xB8\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB8");
-    Assert(CheckParseStringError("\"\xB9\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xB9");
-    Assert(CheckParseStringError("\"\xBA\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xBA");
-    Assert(CheckParseStringError("\"\xBB\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xBB");
-    Assert(CheckParseStringError("\"\xBC\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xBC");
-    Assert(CheckParseStringError("\"\xBD\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xBD");
-    Assert(CheckParseStringError("\"\xBE\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xBE");
-    Assert(CheckParseStringError("\"\xBF\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xBF");
-    Assert(CheckParseStringError("\"\xC0\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC0");
-    Assert(CheckParseStringError("\"\xC1\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC1");
-    Assert(CheckParseStringError("\"\xC2\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC2");
-    Assert(CheckParseStringError("\"\xC3\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC3");
-    Assert(CheckParseStringError("\"\xC4\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC4");
-    Assert(CheckParseStringError("\"\xC5\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC5");
-    Assert(CheckParseStringError("\"\xC6\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC6");
-    Assert(CheckParseStringError("\"\xC7\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC7");
-    Assert(CheckParseStringError("\"\xC8\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC8");
-    Assert(CheckParseStringError("\"\xC9\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xC9");
-    Assert(CheckParseStringError("\"\xCA\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xCA");
-    Assert(CheckParseStringError("\"\xCB\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xCB");
-    Assert(CheckParseStringError("\"\xCC\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xCC");
-    Assert(CheckParseStringError("\"\xCD\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xCD");
-    Assert(CheckParseStringError("\"\xCE\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xCE");
-    Assert(CheckParseStringError("\"\xCF\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xCF");
-    Assert(CheckParseStringError("\"\xD0\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD0");
-    Assert(CheckParseStringError("\"\xD1\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD1");
-    Assert(CheckParseStringError("\"\xD2\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD2");
-    Assert(CheckParseStringError("\"\xD3\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD3");
-    Assert(CheckParseStringError("\"\xD4\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD4");
-    Assert(CheckParseStringError("\"\xD5\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD5");
-    Assert(CheckParseStringError("\"\xD6\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD6");
-    Assert(CheckParseStringError("\"\xD7\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD7");
-    Assert(CheckParseStringError("\"\xD8\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD8");
-    Assert(CheckParseStringError("\"\xD9\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xD9");
-    Assert(CheckParseStringError("\"\xDA\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xDA");
-    Assert(CheckParseStringError("\"\xDB\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xDB");
-    Assert(CheckParseStringError("\"\xDC\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xDC");
-    Assert(CheckParseStringError("\"\xDD\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xDD");
-    Assert(CheckParseStringError("\"\xDE\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xDE");
-    Assert(CheckParseStringError("\"\xDF\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xDF");
-    Assert(CheckParseStringError("\"\xE0\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE0");
-    Assert(CheckParseStringError("\"\xE1\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE1");
-    Assert(CheckParseStringError("\"\xE2\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE2");
-    Assert(CheckParseStringError("\"\xE3\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE3");
-    Assert(CheckParseStringError("\"\xE4\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE4");
-    Assert(CheckParseStringError("\"\xE5\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE5");
-    Assert(CheckParseStringError("\"\xE6\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE6");
-    Assert(CheckParseStringError("\"\xE7\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE7");
-    Assert(CheckParseStringError("\"\xE8\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE8");
-    Assert(CheckParseStringError("\"\xE9\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xE9");
-    Assert(CheckParseStringError("\"\xEA\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xEA");
-    Assert(CheckParseStringError("\"\xEB\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xEB");
-    Assert(CheckParseStringError("\"\xEC\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xEC");
-    Assert(CheckParseStringError("\"\xED\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xED");
-    Assert(CheckParseStringError("\"\xEE\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xEE");
-    Assert(CheckParseStringError("\"\xEF\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xEF");
-    Assert(CheckParseStringError("\"\xF0\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF0");
-    Assert(CheckParseStringError("\"\xF1\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF1");
-    Assert(CheckParseStringError("\"\xF2\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF2");
-    Assert(CheckParseStringError("\"\xF3\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF3");
-    Assert(CheckParseStringError("\"\xF4\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF4");
-    Assert(CheckParseStringError("\"\xF5\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF5");
-    Assert(CheckParseStringError("\"\xF6\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF6");
-    Assert(CheckParseStringError("\"\xF7\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF7");
-    Assert(CheckParseStringError("\"\xF8\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF8");
-    Assert(CheckParseStringError("\"\xF9\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xF9");
-    Assert(CheckParseStringError("\"\xFA\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xFA");
-    Assert(CheckParseStringError("\"\xFB\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xFB");
-    Assert(CheckParseStringError("\"\xFC\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xFC");
-    Assert(CheckParseStringError("\"\xFD\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xFD");
-    Assert(CheckParseStringError("\"\xFE\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xFE");
-    Assert(CheckParseStringError("\"\xFF\"", JsonErrorInvalidStringCharacter), "Parse string error invalid character \\xFF");
     Assert(CheckParseStringError("\"\\a\"", JsonErrorInvalidStringEscapeSequence), "Parse string error invalid escape sequence");
     Assert(CheckParseStringError("\"\\ux\"", JsonErrorInvalidStringHexEscapeSequence), "Parse string error invalid hex escape sequence 1");
     Assert(CheckParseStringError("\"\\u0x\"", JsonErrorInvalidStringHexEscapeSequence), "Parse string error invalid hex escape sequence 2");
