@@ -14,7 +14,7 @@ extern "C" {
 //------------------------------------------------------------------------------
 // Function declarations
 
-int JsonTest();
+int JsonTest(void);
 
 #ifdef __cplusplus
 }
