@@ -7,10 +7,10 @@
 //------------------------------------------------------------------------------
 // Includes
 
-#include <ctype.h> // isdigit, isxdigit
+#include <ctype.h>
 #include "Json.h"
-#include <stdio.h> // printf, snprintf, sscanf
-#include <string.h> // strncmp
+#include <stdio.h>
+#include <string.h>
 
 //------------------------------------------------------------------------------
 // Function declarations
