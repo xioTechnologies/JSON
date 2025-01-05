@@ -19,11 +19,11 @@ static void SkipWhiteSpace(const char **const json);
 
 static JsonError CheckType(const char **const json, const JsonType expectedType);
 
-static JsonError ParseEscapeSequence(const char **const json, char *const destination, unsigned int *const index);
+static JsonError ParseEscapeSequence(const char **const json, char *const destination, size_t *const index);
 
-static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, unsigned int *const index);
+static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, size_t *const index);
 
-static void WriteToDestination(char *const destination, unsigned int *const index, const char character);
+static void WriteToDestination(char *const destination, size_t *const index, const char character);
 
 static JsonError ParseValue(const char **const json, const bool print, int *const indent);
 
@@ -239,7 +239,7 @@ JsonError JsonParseString(const char **const json, char *const destination, cons
     (*json)++;
 
     // Parse string
-    unsigned int index = 0;
+    size_t index = 0;
     while (true) {
         if ((destination != NULL) && (index >= destinationSize)) {
             return JsonErrorStringTooLong;
@@ -277,7 +277,7 @@ JsonError JsonParseString(const char **const json, char *const destination, cons
  * @param index Index.
  * @return JSON error.
  */
-static JsonError ParseEscapeSequence(const char **const json, char *const destination, unsigned int *const index) {
+static JsonError ParseEscapeSequence(const char **const json, char *const destination, size_t *const index) {
     switch (*(*json + 1)) {
         case '\"':
             WriteToDestination(destination, index, '"');
@@ -320,7 +320,7 @@ static JsonError ParseEscapeSequence(const char **const json, char *const destin
  * @param index Index.
  * @return JSON error.
  */
-static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, unsigned int *const index) {
+static JsonError ParseHexEscapeSequence(const char **const json, char *const destination, size_t *const index) {
     if (isxdigit((int) *(*json + 2)) == 0) {
         return JsonErrorInvalidStringHexEscapeSequence;
     }
@@ -345,13 +345,13 @@ static JsonError ParseHexEscapeSequence(const char **const json, char *const des
 }
 
 /**
- * @brief Writes character to destination and increments index if destination is
+ * @brief Writes character to destination and increments index, if destination is
  * not NULL.
  * @param destination Destination.
  * @param index Index.
  * @param character Character.
  */
-static void WriteToDestination(char *const destination, unsigned int *const index, const char character) {
+static void WriteToDestination(char *const destination, size_t *const index, const char character) {
     if (destination != NULL) {
         destination[(*index)++] = character;
     }
