@@ -78,7 +78,7 @@ JsonError JsonParseType(const char **const json, JsonType *const type) {
 }
 
 /**
- * @brief Advances the JSON pointer to the first non whitespace character.
+ * @brief Advances the JSON pointer to the first non-whitespace character.
  * @param json JSON pointer.
  */
 static void SkipWhiteSpace(const char **const json) {
@@ -117,7 +117,7 @@ static JsonError CheckType(const char **const json, const JsonType expectedType)
 
 /**
  * @brief Parses an object start.  The JSON pointer is advanced to the first
- * non whitespace character after the object start.
+ * non-whitespace character after the object start.
  * @param json JSON pointer.
  * @return JSON error.
  */
@@ -148,7 +148,7 @@ JsonError JsonParseObjectEnd(const char **const json) {
 
 /**
  * @brief Parses an array start.  The JSON pointer is advanced to the first
- * non whitespace character after the object start.
+ * non-whitespace character after the object start.
  * @param json JSON pointer.
  * @return JSON error.
  */
