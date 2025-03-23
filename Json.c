@@ -35,7 +35,7 @@ static JsonError ParseArray(const char **const json, const bool print, int *cons
 // Functions
 
 /**
- * @brief Parses value type.  The JSON pointer is not modified.
+ * @brief Parses value type. The JSON pointer is not modified.
  * @param json JSON pointer.
  * @param type Type.
  * @return JSON error.
@@ -97,7 +97,7 @@ static void SkipWhiteSpace(const char **const json) {
 }
 
 /**
- * @brief Checks that the type matches the expected type.  The JSON pointer is
+ * @brief Checks that the type matches the expected type. The JSON pointer is
  * not modified.
  * @param json JSON pointer.
  * @param expectedType Expected type.
@@ -116,7 +116,7 @@ static JsonError CheckType(const char **const json, const JsonType expectedType)
 }
 
 /**
- * @brief Parses an object start.  The JSON pointer is advanced to the first
+ * @brief Parses an object start. The JSON pointer is advanced to the first
  * non-whitespace character after the object start.
  * @param json JSON pointer.
  * @return JSON error.
@@ -132,7 +132,7 @@ JsonError JsonParseObjectStart(const char **const json) {
 }
 
 /**
- * @brief Parses an object end.  The JSON pointer is advanced to the first
+ * @brief Parses an object end. The JSON pointer is advanced to the first
  * character after the object end.
  * @param json JSON pointer.
  * @return JSON error.
@@ -147,7 +147,7 @@ JsonError JsonParseObjectEnd(const char **const json) {
 }
 
 /**
- * @brief Parses an array start.  The JSON pointer is advanced to the first
+ * @brief Parses an array start. The JSON pointer is advanced to the first
  * non-whitespace character after the object start.
  * @param json JSON pointer.
  * @return JSON error.
@@ -163,7 +163,7 @@ JsonError JsonParseArrayStart(const char **const json) {
 }
 
 /**
- * @brief Parses an array end.  The JSON pointer is advanced to the first
+ * @brief Parses an array end. The JSON pointer is advanced to the first
  * character after the array end.
  * @param json JSON pointer.
  * @return JSON error.
@@ -178,7 +178,7 @@ JsonError JsonParseArrayEnd(const char **const json) {
 }
 
 /**
- * @brief Parses a comma.  The JSON pointer is advanced to the first character
+ * @brief Parses a comma. The JSON pointer is advanced to the first character
  * after the comma.
  * @param json JSON pointer.
  * @return JSON error.
@@ -193,10 +193,10 @@ JsonError JsonParseComma(const char **const json) {
 }
 
 /**
- * @brief Parses the key in a JSON object.  The JSON pointer is advanced to the
+ * @brief Parses the key in a JSON object. The JSON pointer is advanced to the
  * character after the colon that separates the key/value pair.
  * @param json JSON pointer.
- * @param destination Destination.  NULL if not required.
+ * @param destination Destination. NULL if not required.
  * @param destinationSize Destination size.
  * @return JSON error.
  */
@@ -222,12 +222,12 @@ JsonError JsonParseKey(const char **const json, char *const destination, const s
 }
 
 /**
- * @brief Parse string.  The JSON pointer is advanced to the first
+ * @brief Parse string. The JSON pointer is advanced to the first
  * character after the string.
  * @param json JSON pointer.
- * @param destination Destination.  NULL if not required.
+ * @param destination Destination. NULL if not required.
  * @param destinationSize Destination size.
- * @param numberOfBytes Number of bytes in string.  NULL if not required.
+ * @param numberOfBytes Number of bytes in string. NULL if not required.
  * @return JSON error.
  */
 JsonError JsonParseString(const char **const json, char *const destination, const size_t destinationSize, size_t *const numberOfBytes) {
@@ -270,7 +270,7 @@ JsonError JsonParseString(const char **const json, char *const destination, cons
 }
 
 /**
- * @brief Parse escape sequence.  The JSON pointer is advanced to the first
+ * @brief Parse escape sequence. The JSON pointer is advanced to the first
  * character after the escape sequence.
  * @param json JSON pointer.
  * @param destination Destination.
@@ -313,7 +313,7 @@ static JsonError ParseEscapeSequence(const char **const json, char *const destin
 }
 
 /**
- * @brief Parse hex escape sequence.  The JSON pointer is advanced to the
+ * @brief Parse hex escape sequence. The JSON pointer is advanced to the
  * first character after the hex escape sequence.
  * @param json JSON pointer.
  * @param destination Destination.
@@ -358,10 +358,10 @@ static void WriteToDestination(char *const destination, size_t *const index, con
 }
 
 /**
- * @brief Parses number.  The JSON pointer is advanced to the first character
+ * @brief Parses number. The JSON pointer is advanced to the first character
  * after the number.
  * @param json JSON pointer.
- * @param number Number.  NULL if not required.
+ * @param number Number. NULL if not required.
  * @return JSON error.
  */
 JsonError JsonParseNumber(const char **const json, float *const number) {
@@ -435,10 +435,10 @@ JsonError JsonParseNumber(const char **const json, float *const number) {
 }
 
 /**
- * @brief Parses boolean.  The JSON pointer is advanced to the first character
+ * @brief Parses boolean. The JSON pointer is advanced to the first character
  * after the boolean.
  * @param json JSON pointer.
- * @param boolean Boolean.  NULL if not required.
+ * @param boolean Boolean. NULL if not required.
  * @return JSON error.
  */
 JsonError JsonParseBoolean(const char **const json, bool *const boolean) {
@@ -471,7 +471,7 @@ JsonError JsonParseBoolean(const char **const json, bool *const boolean) {
 }
 
 /**
- * @brief Parses null.  The JSON pointer is advanced to the first character
+ * @brief Parses null. The JSON pointer is advanced to the first character
  * after the null.
  * @param json JSON pointer.
  * @return JSON error.
@@ -493,7 +493,7 @@ JsonError JsonParseNull(const char **const json) {
 }
 
 /**
- * @brief Parses any JSON and discards data.  The JSON pointer is advanced to
+ * @brief Parses any JSON and discards data. The JSON pointer is advanced to
  * the first character after the JSON.
  * @param json JSON pointer.
  * @return JSON error.
@@ -515,7 +515,7 @@ void JsonPrint(const char *json_) {
 }
 
 /**
- * @brief Parses value and discards data.  The JSON pointer is advanced to the
+ * @brief Parses value and discards data. The JSON pointer is advanced to the
  * first character after the value.
  * @param json JSON pointer.
  * @param print True to print.
@@ -574,7 +574,7 @@ static JsonError ParseValue(const char **const json, const bool print, int *cons
 }
 
 /**
- * @brief Parses object and discards data.  The JSON pointer is advanced to the
+ * @brief Parses object and discards data. The JSON pointer is advanced to the
  * first character after the object.
  * @param json JSON pointer.
  * @param print True to print.
@@ -628,7 +628,7 @@ static JsonError ParseObject(const char **const json, const bool print, int *con
 }
 
 /**
- * @brief Parses array and discards data.  The JSON pointer is advanced to the
+ * @brief Parses array and discards data. The JSON pointer is advanced to the
  * first character after the array.
  * @param json JSON pointer.
  * @param print True to print.
