@@ -21,7 +21,7 @@ extern "C" {
 // Definitions
 
 /**
- * @brief JSON result.
+ * @brief Result.
  */
 typedef enum {
     JsonResultOk,
@@ -44,7 +44,7 @@ typedef enum {
 } JsonResult;
 
 /**
- * @brief JSON type.
+ * @brief Type.
  */
 typedef enum {
     JsonTypeString,
