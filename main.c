@@ -51,6 +51,10 @@ static void TestParseNumberError(void);
 
 static int CheckParseNumberError(const char *json, const JsonResult expectedError);
 
+static void TestParseNumberRaw(void);
+
+static int CheckParseNumberRaw(const char *json, const char *const expectedString);
+
 static void TestParseBoolean(void);
 
 static int CheckParseBoolean(const char *json, const bool expectedBoolean);
@@ -131,6 +135,7 @@ int main(void) {
     TestParseStringError();
     TestParseNumber();
     TestParseNumberError();
+    TestParseNumberRaw();
     TestParseBoolean();
     TestParseBooleaneError();
     TestParseNull();
@@ -360,6 +365,22 @@ static void TestParseNumberError(void) {
 static int CheckParseNumberError(const char *json, const JsonResult expectedError) {
     float number;
     if (JsonParseNumber(&json, &number) != expectedError) {
+        return 1;
+    }
+    return 0;
+}
+
+static void TestParseNumberRaw(void) {
+    Assert(CheckParseNumberRaw("123", "123"), "Parse number raw 123");
+    Assert(CheckParseNumberRaw("123}", "123"), "Parse number raw 123}");
+}
+
+static int CheckParseNumberRaw(const char *json, const char *const expectedString) {
+    char string[256];
+    if (JsonParseNumberRaw(&json, string, sizeof(string)) != JsonResultOk) {
+        return 1;
+    }
+    if (strcmp(string, expectedString) != 0) {
         return 1;
     }
     return 0;
