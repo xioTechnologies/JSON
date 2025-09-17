@@ -15,7 +15,7 @@
 //------------------------------------------------------------------------------
 // Function declarations
 
-static void SkipWhiteSpace(const char **const json);
+static void SkipWhitespace(const char **const json);
 
 static JsonResult CheckType(const char **const json, const JsonType expectedType);
 
@@ -41,7 +41,7 @@ static JsonResult ParseArray(const char **const json, const bool print, int *con
  * @return Result.
  */
 JsonResult JsonParseType(const char **const json, JsonType *const type) {
-    SkipWhiteSpace(json);
+    SkipWhitespace(json);
     switch (**json) {
         case '"':
             *type = JsonTypeString;
@@ -81,7 +81,7 @@ JsonResult JsonParseType(const char **const json, JsonType *const type) {
  * @brief Advances the JSON pointer to the first non-whitespace character.
  * @param json JSON pointer.
  */
-static void SkipWhiteSpace(const char **const json) {
+static void SkipWhitespace(const char **const json) {
     while (true) {
         switch (**json) {
             case ' ':
@@ -127,7 +127,7 @@ JsonResult JsonParseObjectStart(const char **const json) {
         return result;
     }
     (*json)++;
-    SkipWhiteSpace(json);
+    SkipWhitespace(json);
     return JsonResultOk;
 }
 
@@ -138,7 +138,7 @@ JsonResult JsonParseObjectStart(const char **const json) {
  * @return Result.
  */
 JsonResult JsonParseObjectEnd(const char **const json) {
-    SkipWhiteSpace(json);
+    SkipWhitespace(json);
     if (**json != '}') {
         return JsonResultMissingObjectEnd;
     }
@@ -158,7 +158,7 @@ JsonResult JsonParseArrayStart(const char **const json) {
         return result;
     }
     (*json)++;
-    SkipWhiteSpace(json);
+    SkipWhitespace(json);
     return JsonResultOk;
 }
 
@@ -169,7 +169,7 @@ JsonResult JsonParseArrayStart(const char **const json) {
  * @return Result.
  */
 JsonResult JsonParseArrayEnd(const char **const json) {
-    SkipWhiteSpace(json);
+    SkipWhitespace(json);
     if (**json != ']') {
         return JsonResultMissingArrayEnd;
     }
@@ -184,7 +184,7 @@ JsonResult JsonParseArrayEnd(const char **const json) {
  * @return Result.
  */
 JsonResult JsonParseComma(const char **const json) {
-    SkipWhiteSpace(json);
+    SkipWhitespace(json);
     if (**json != ',') {
         return JsonResultMissingComma;
     }
@@ -213,7 +213,7 @@ JsonResult JsonParseKey(const char **const json, char *const destination, const 
     }
 
     // Parse colon
-    SkipWhiteSpace(json);
+    SkipWhitespace(json);
     if (**json != ':') {
         return JsonResultMissingColon;
     }
@@ -703,7 +703,7 @@ static JsonResult ParseArray(const char **const json, const bool print, int *con
 const char *JsonResultToString(const JsonResult result) {
     switch (result) {
         case JsonResultOk:
-            return "OK";
+            return "Ok";
         case JsonResultInvalidSyntax:
             return "Invalid syntax";
         case JsonResultUnexpectedType:
