@@ -3,4 +3,4 @@
 
 # JSON
 
-A C library for parsing JSON. See [json.org](https://www.json.org/) and [RFC 8259](https://datatracker.ietf.org/doc/html/rfc8259).
+A C library for parsing JSON strings. See [json.org](https://www.json.org/) and [RFC 8259](https://datatracker.ietf.org/doc/html/rfc8259).
