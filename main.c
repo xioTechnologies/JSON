@@ -59,7 +59,7 @@ static void TestParseBoolean(void);
 
 static int CheckParseBoolean(const char *json, const bool expectedBoolean);
 
-static void TestParseBooleaneError(void);
+static void TestParseBooleanError(void);
 
 static int CheckParseBooleanError(const char *json, const JsonResult expectedError);
 
@@ -137,7 +137,7 @@ int main(void) {
     TestParseNumberError();
     TestParseNumberRaw();
     TestParseBoolean();
-    TestParseBooleaneError();
+    TestParseBooleanError();
     TestParseNull();
     TestParseNullError();
     TestParse();
@@ -402,7 +402,7 @@ static int CheckParseBoolean(const char *json, const bool expectedBoolean) {
     return 0;
 }
 
-static void TestParseBooleaneError(void) {
+static void TestParseBooleanError(void) {
     Assert(CheckParseBooleanError("", JsonResultInvalidSyntax), "Parse boolean error invalid syntax");
     Assert(CheckParseBooleanError("{", JsonResultUnexpectedType), "Parse boolean error unexpected type");
     Assert(CheckParseBooleanError("t", JsonResultInvalidSyntax), "Parse boolean error t");
