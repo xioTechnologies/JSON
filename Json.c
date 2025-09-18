@@ -620,8 +620,7 @@ static JsonResult ParseObject(const char **const json, const bool print, int *co
     (*indent)++;
     while (true) {
         // Parse key
-        char key[64];
-        result = JsonParseKey(json, key, sizeof(key));
+        result = JsonParseKey(json, NULL, 0);
         if (result != JsonResultOk) {
             return result;
         }
