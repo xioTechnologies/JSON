@@ -127,7 +127,6 @@ JsonResult JsonParseObjectStart(const char **const json) {
         return result;
     }
     (*json)++;
-    SkipWhitespace(json);
     return JsonResultOk;
 }
 
@@ -158,7 +157,6 @@ JsonResult JsonParseArrayStart(const char **const json) {
         return result;
     }
     (*json)++;
-    SkipWhitespace(json);
     return JsonResultOk;
 }
 

@@ -166,23 +166,23 @@ static void Assert(const int result, const char *const message) {
 }
 
 static void TestParseType(void) {
-    Assert(CheckParseType("\"", JsonTypeString), "Parse type string without whitespace");
-    Assert(CheckParseType("-", JsonTypeNumber), "Parse type number - without whitespace");
-    Assert(CheckParseType("0", JsonTypeNumber), "Parse type number 0 without whitespace");
-    Assert(CheckParseType("1", JsonTypeNumber), "Parse type number 1 without whitespace");
-    Assert(CheckParseType("2", JsonTypeNumber), "Parse type number 2 without whitespace");
-    Assert(CheckParseType("3", JsonTypeNumber), "Parse type number 3 without whitespace");
-    Assert(CheckParseType("4", JsonTypeNumber), "Parse type number 4 without whitespace");
-    Assert(CheckParseType("5", JsonTypeNumber), "Parse type number 5 without whitespace");
-    Assert(CheckParseType("6", JsonTypeNumber), "Parse type number 6 without whitespace");
-    Assert(CheckParseType("7", JsonTypeNumber), "Parse type number 7 without whitespace");
-    Assert(CheckParseType("8", JsonTypeNumber), "Parse type number 8 without whitespace");
-    Assert(CheckParseType("9", JsonTypeNumber), "Parse type number 9 without whitespace");
-    Assert(CheckParseType("{", JsonTypeObject), "Parse type object without whitespace");
-    Assert(CheckParseType("[", JsonTypeArray), "Parse type array without whitespace");
-    Assert(CheckParseType("t", JsonTypeBoolean), "Parse type boolean true without whitespace");
-    Assert(CheckParseType("f", JsonTypeBoolean), "Parse type boolean false without whitespace");
-    Assert(CheckParseType("n", JsonTypeNull), "Parse type null without whitespace");
+    Assert(CheckParseType("\"", JsonTypeString), "Parse type string");
+    Assert(CheckParseType("-", JsonTypeNumber), "Parse type number -");
+    Assert(CheckParseType("0", JsonTypeNumber), "Parse type number 0");
+    Assert(CheckParseType("1", JsonTypeNumber), "Parse type number 1");
+    Assert(CheckParseType("2", JsonTypeNumber), "Parse type number 2");
+    Assert(CheckParseType("3", JsonTypeNumber), "Parse type number 3");
+    Assert(CheckParseType("4", JsonTypeNumber), "Parse type number 4");
+    Assert(CheckParseType("5", JsonTypeNumber), "Parse type number 5");
+    Assert(CheckParseType("6", JsonTypeNumber), "Parse type number 6");
+    Assert(CheckParseType("7", JsonTypeNumber), "Parse type number 7");
+    Assert(CheckParseType("8", JsonTypeNumber), "Parse type number 8");
+    Assert(CheckParseType("9", JsonTypeNumber), "Parse type number 9");
+    Assert(CheckParseType("{", JsonTypeObject), "Parse type object");
+    Assert(CheckParseType("[", JsonTypeArray), "Parse type array");
+    Assert(CheckParseType("t", JsonTypeBoolean), "Parse type boolean true");
+    Assert(CheckParseType("f", JsonTypeBoolean), "Parse type boolean false");
+    Assert(CheckParseType("n", JsonTypeNull), "Parse type null");
     Assert(CheckParseType(WS "\"", JsonTypeString), "Parse type string with whitespace");
     Assert(CheckParseType(WS "-", JsonTypeNumber), "Parse type number - with whitespace");
     Assert(CheckParseType(WS "0", JsonTypeNumber), "Parse type number 0 with whitespace");
@@ -226,6 +226,7 @@ static int CheckTestParseTypeError(const char *json, const JsonResult expectedEr
 }
 
 static void TestParseString(void) {
+    Assert(CheckParseString("\"\"", "", 1), "Parse string zero length");
     Assert(CheckParseString("\" !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~\"",
                             " !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~",
                             94), "Parse string valid characters <0x7F");
@@ -239,6 +240,7 @@ static void TestParseString(void) {
     Assert(CheckParseString("\" \\u1141\\u2242\\u3343 \"", " ABC ", 6), "Parse string hex escape sequences non zero upper nibble");
     Assert(CheckParseString("\" \\uFFFF \"", " \xFF ", 4), "Parse string hex escape sequences FFFF");
     Assert(CheckParseString("\" ABC\\u0000DEF \"", " ABC\0DEF ", 10), "Parse string including null hex escape sequence");
+    Assert(CheckParseString(WS "\"string\"" WS, "string", 7), "Parse string with whitespace");
 }
 
 static int CheckParseString(const char *json, const char *const expectedString, const size_t expectedStringSize) {
@@ -331,6 +333,7 @@ static void TestParseNumber(void) {
     Assert(CheckParseNumber("123.456E+1", 1234.56f), "Parse number 123.456E+1");
     Assert(CheckParseNumber("123.456e-1", 12.3456f), "Parse number 123.456e-1");
     Assert(CheckParseNumber("123.456E-1", 12.3456f), "Parse number 123.456E-1");
+    Assert(CheckParseNumber(WS "123" WS, 123.0f), "Parse number 123 with whitespace");
 }
 
 static int CheckParseNumber(const char *json, const float expectedNumber) {
@@ -373,6 +376,7 @@ static int CheckParseNumberError(const char *json, const JsonResult expectedErro
 static void TestParseNumberRaw(void) {
     Assert(CheckParseNumberRaw("123", "123"), "Parse number raw 123");
     Assert(CheckParseNumberRaw("123}", "123"), "Parse number raw 123}");
+    Assert(CheckParseNumberRaw(WS "123" WS, "123"), "Parse number raw 123 with whitespace");
 }
 
 static int CheckParseNumberRaw(const char *json, const char *const expectedString) {
@@ -389,6 +393,8 @@ static int CheckParseNumberRaw(const char *json, const char *const expectedStrin
 static void TestParseBoolean(void) {
     Assert(CheckParseBoolean("true", true), "Parse boolean true");
     Assert(CheckParseBoolean("false", false), "Parse boolean false");
+    Assert(CheckParseBoolean(WS "true" WS, true), "Parse boolean true with whitespace");
+    Assert(CheckParseBoolean(WS "false" WS, false), "Parse boolean false with whitespace");
 }
 
 static int CheckParseBoolean(const char *json, const bool expectedBoolean) {
@@ -428,6 +434,7 @@ static int CheckParseBooleanError(const char *json, const JsonResult expectedErr
 
 static void TestParseNull(void) {
     Assert(CheckParseNull("null"), "Parse null");
+    Assert(CheckParseNull(WS "null" WS), "Parse null with whitespace");
 }
 
 static int CheckParseNull(const char *json) {
@@ -455,14 +462,14 @@ static int CheckParseNullError(const char *json, const JsonResult expectedError)
 }
 
 static void TestParse(void) {
-    Assert(CheckParse("{}"), "Parse empty object without whitespace");
-    Assert(CheckParse("[]"), "Parse empty array without whitespace");
-    Assert(CheckParse("{" WS "}"), "Parse empty object with whitespace");
-    Assert(CheckParse("[" WS "]"), "Empty empty array with whitespace");
-    Assert(CheckParse("{\"a\":\"string\",\"b\":123,\"c\":{\"x\":0},\"d\":[0],\"e\":true,\"f\":false,\"g\":null}"), "Parse object of each type without whitespace");
-    Assert(CheckParse("[\"string\",123,{\"x\":0},[0],true,false,null]"), "Parse array of each type without whitespace");
-    Assert(CheckParse("{" WS "\"a\"" WS ":" WS "\"string\"" WS "," WS "\"b\"" WS ":" WS "123" WS "," WS "\"c\"" WS ":" WS "{" WS "\"x\"" WS ":" WS "0" WS "}" WS "," WS "\"d\"" WS ":" WS "[" WS "0" WS "]" WS "," WS "\"e\"" WS ":" WS "true" WS "," WS "\"f\"" WS ":" WS "false" WS "," WS "\"g\"" WS ":" WS "null" WS "}"), "Parse object of each type with whitespace");
-    Assert(CheckParse("[\"string\"" WS "," WS "123" WS "," WS "{" WS "\"x\"" WS ":" WS "0" WS "}" WS "," WS "[" WS "0" WS "]" WS "," WS "true" WS "," WS "false" WS "," WS "null]"), "Parse array of each type with whitespace");
+    Assert(CheckParse("{}"), "Parse empty object");
+    Assert(CheckParse("[]"), "Parse empty array");
+    Assert(CheckParse(WS "{" WS "}" WS), "Parse empty object with whitespace");
+    Assert(CheckParse(WS "[" WS "]" WS), "Empty empty array with whitespace");
+    Assert(CheckParse("{\"a\":\"string\",\"b\":123,\"c\":{\"x\":0},\"d\":[0],\"e\":true,\"f\":false,\"g\":null}"), "Parse object of all types");
+    Assert(CheckParse("[\"string\",123,{\"x\":0},[0],true,false,null]"), "Parse array of all types");
+    Assert(CheckParse(WS "{" WS "\"a\"" WS ":" WS "\"string\"" WS "," WS "\"b\"" WS ":" WS "123" WS "," WS "\"c\"" WS ":" WS "{" WS "\"x\"" WS ":" WS "0" WS "}" WS "," WS "\"d\"" WS ":" WS "[" WS "0" WS "]" WS "," WS "\"e\"" WS ":" WS "true" WS "," WS "\"f\"" WS ":" WS "false" WS "," WS "\"g\"" WS ":" WS "null" WS "}"), "Parse object of alls types with whitespace");
+    Assert(CheckParse(WS "[" WS "\"string\"" WS "," WS "123" WS "," WS "{" WS "\"x\"" WS ":" WS "0" WS "}" WS "," WS "[" WS "0" WS "]" WS "," WS "true" WS "," WS "false" WS "," WS "null" WS "]"), "Parse array of all types with whitespace");
 }
 
 static int CheckParse(const char *json) {
@@ -490,8 +497,8 @@ static int CheckParseError(const char *json, const JsonResult expectedError) {
 }
 
 static void TestParseDefinedObjectOfString(void) {
-    Assert(CheckParseDefinedObjectOfString("{\"key\":\"string\"}"), "Parse defined object of string without whitespace");
-    Assert(CheckParseDefinedObjectOfString("{" WS "\"key\"" WS ":" WS "\"string\"" WS "}"), "Parse defined object of string with whitespace");
+    Assert(CheckParseDefinedObjectOfString("{\"key\":\"string\"}"), "Parse defined object of string");
+    Assert(CheckParseDefinedObjectOfString(WS "{" WS "\"key\"" WS ":" WS "\"string\"" WS "}" WS), "Parse defined object of string with whitespace");
 }
 
 static int CheckParseDefinedObjectOfString(const char *json) {
@@ -518,8 +525,8 @@ static int CheckParseDefinedObjectOfString(const char *json) {
 }
 
 static void TestParseDefinedObjectOfNumber(void) {
-    Assert(CheckParseDefinedObjectOfNumber("{\"key\":123}"), "Parse defined object of number without whitespace");
-    Assert(CheckParseDefinedObjectOfNumber("{" WS "\"key\"" WS ":" WS "123" WS "}"), "Parse defined object of number with whitespace");
+    Assert(CheckParseDefinedObjectOfNumber("{\"key\":123}"), "Parse defined object of number");
+    Assert(CheckParseDefinedObjectOfNumber(WS "{" WS "\"key\"" WS ":" WS "123" WS "}" WS), "Parse defined object of number with whitespace");
 }
 
 static int CheckParseDefinedObjectOfNumber(const char *json) {
@@ -546,8 +553,8 @@ static int CheckParseDefinedObjectOfNumber(const char *json) {
 }
 
 static void TestParseDefinedObjectOfObject(void) {
-    Assert(CheckParseDefinedObjectOfObject("{\"key\":{\"x\":0}}"), "Parse defined object of object without whitespace");
-    Assert(CheckParseDefinedObjectOfObject("{" WS "\"key\"" WS ":" WS "{" WS "\"x\"" WS ":" WS "0" WS "}" WS "}"), "Parse defined object of object with whitespace");
+    Assert(CheckParseDefinedObjectOfObject("{\"key\":{\"x\":0}}"), "Parse defined object of object");
+    Assert(CheckParseDefinedObjectOfObject(WS "{" WS "\"key\"" WS ":" WS "{" WS "\"x\"" WS ":" WS "0" WS "}" WS "}" WS), "Parse defined object of object with whitespace");
 }
 
 static int CheckParseDefinedObjectOfObject(const char *json) {
@@ -583,8 +590,8 @@ static int CheckParseDefinedObjectOfObject(const char *json) {
 }
 
 static void TestParseDefinedObjectOfArray(void) {
-    Assert(CheckParseDefinedObjectOfArray("{\"key\":[0]}"), "Parse defined object of array without whitespace");
-    Assert(CheckParseDefinedObjectOfArray("{" WS "\"key\"" WS ":" WS "[" WS "0" WS "]" WS "}"), "Parse defined object of array with whitespace");
+    Assert(CheckParseDefinedObjectOfArray("{\"key\":[0]}"), "Parse defined object of array");
+    Assert(CheckParseDefinedObjectOfArray(WS "{" WS "\"key\"" WS ":" WS "[" WS "0" WS "]" WS "}" WS), "Parse defined object of array with whitespace");
 }
 
 static int CheckParseDefinedObjectOfArray(const char *json) {
@@ -617,8 +624,8 @@ static int CheckParseDefinedObjectOfArray(const char *json) {
 }
 
 static void TestParseDefinedObjectOfBooleanTrue(void) {
-    Assert(CheckParseDefinedObjectOfBooleanTrue("{\"key\":true}"), "Parse defined object of boolean true without whitespace");
-    Assert(CheckParseDefinedObjectOfBooleanTrue("{" WS "\"key\"" WS ":" WS "true" WS "}"), "Parse defined object of boolean true with whitespace");
+    Assert(CheckParseDefinedObjectOfBooleanTrue("{\"key\":true}"), "Parse defined object of boolean true");
+    Assert(CheckParseDefinedObjectOfBooleanTrue(WS "{" WS "\"key\"" WS ":" WS "true" WS "}" WS), "Parse defined object of boolean true with whitespace");
 }
 
 static int CheckParseDefinedObjectOfBooleanTrue(const char *json) {
@@ -645,8 +652,8 @@ static int CheckParseDefinedObjectOfBooleanTrue(const char *json) {
 }
 
 static void TestParseDefinedObjectOfBooleanFalse(void) {
-    Assert(CheckParseDefinedObjectOfBooleanFalse("{\"key\":false}"), "Parse defined object of boolean false without whitespace");
-    Assert(CheckParseDefinedObjectOfBooleanFalse("{" WS "\"key\"" WS ":" WS "false" WS "}"), "Parse defined object of boolean false with whitespace");
+    Assert(CheckParseDefinedObjectOfBooleanFalse("{\"key\":false}"), "Parse defined object of boolean false");
+    Assert(CheckParseDefinedObjectOfBooleanFalse(WS "{" WS "\"key\"" WS ":" WS "false" WS "}" WS), "Parse defined object of boolean false with whitespace");
 }
 
 static int CheckParseDefinedObjectOfBooleanFalse(const char *json) {
@@ -673,8 +680,8 @@ static int CheckParseDefinedObjectOfBooleanFalse(const char *json) {
 }
 
 static void TestParseDefinedObjectOfNull(void) {
-    Assert(CheckParseDefinedObjectOfNull("{\"key\":null}"), "Parse defined object of null without whitespace");
-    Assert(CheckParseDefinedObjectOfNull("{" WS "\"key\"" WS ":" WS "null" WS "}"), "Parse defined object of null with whitespace");
+    Assert(CheckParseDefinedObjectOfNull("{\"key\":null}"), "Parse defined object of null");
+    Assert(CheckParseDefinedObjectOfNull(WS "{" WS "\"key\"" WS ":" WS "null" WS "}" WS), "Parse defined object of null with whitespace");
 }
 
 static int CheckParseDefinedObjectOfNull(const char *json) {
@@ -701,8 +708,8 @@ static int CheckParseDefinedObjectOfNull(const char *json) {
 }
 
 static void TestParseDefinedObjectOfAllTypes(void) {
-    Assert(CheckParseDefinedObjectOfAllTypes("{\"a\":\"string\",\"b\":123,\"c\":{\"x\":0},\"d\":[0],\"e\":true,\"f\":false,\"g\":null,\"h\":null}"), "Parse defined object of all types without whitespace");
-    Assert(CheckParseDefinedObjectOfAllTypes("{" WS "\"a\"" WS ":" WS "\"string\"" WS "," WS "\"b\"" WS ":" WS "123" WS "," WS "\"c\"" WS ":" WS "{" WS "\"x\"" WS ":" WS "0" WS "}" WS "," WS "\"d\"" WS ":" WS "[" WS "0" WS "]" WS "," WS "\"e\"" WS ":" WS "true" WS "," WS "\"f\"" WS ":" WS "false" WS "," WS "\"g\"" WS ":" WS "null" WS "," WS "\"h\"" WS ":" WS "null" WS "}"), "Parse defined object of all types with whitespace");
+    Assert(CheckParseDefinedObjectOfAllTypes("{\"a\":\"string\",\"b\":123,\"c\":{\"x\":0},\"d\":[0],\"e\":true,\"f\":false,\"g\":null,\"h\":null}"), "Parse defined object of all types");
+    Assert(CheckParseDefinedObjectOfAllTypes(WS "{" WS "\"a\"" WS ":" WS "\"string\"" WS "," WS "\"b\"" WS ":" WS "123" WS "," WS "\"c\"" WS ":" WS "{" WS "\"x\"" WS ":" WS "0" WS "}" WS "," WS "\"d\"" WS ":" WS "[" WS "0" WS "]" WS "," WS "\"e\"" WS ":" WS "true" WS "," WS "\"f\"" WS ":" WS "false" WS "," WS "\"g\"" WS ":" WS "null" WS "," WS "\"h\"" WS ":" WS "null" WS "}" WS), "Parse defined object of all types with whitespace");
 }
 
 static int CheckParseDefinedObjectOfAllTypes(const char *json) {
@@ -885,8 +892,8 @@ static int CheckParseDefinedObjectError(const char *json, const JsonResult expec
 }
 
 static void TestParsePartial(void) {
-    Assert(CheckParsePartial("[0,{\"x\":0},0]"), "Parse partial without whitespace");
-    Assert(CheckParsePartial("[" WS "0" WS "," WS "{" WS "\"x\"" WS ":" WS "0}" WS "," WS "0]"), "Parse partial with whitespace");
+    Assert(CheckParsePartial("[0,{\"x\":0},0]"), "Parse partial");
+    Assert(CheckParsePartial(WS "[" WS "0" WS "," WS "{" WS "\"x\"" WS ":" WS "0}" WS "," WS "0" WS "]" WS), "Parse partial with whitespace");
 }
 
 static int CheckParsePartial(const char *json) {
