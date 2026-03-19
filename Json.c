@@ -400,7 +400,7 @@ JsonResult JsonParseNumberRaw(const char **const json, char *const destination, 
     const char *jsonCopy = *json;
     if (*jsonCopy == '-') {
         jsonCopy++;
-        if (isdigit((int) *jsonCopy) == 0) {
+        if (isdigit((unsigned char) *jsonCopy) == 0) {
             return JsonResultInvalidNumberFormat; // minus sign must be followed by digit
         }
     }
@@ -414,18 +414,18 @@ JsonResult JsonParseNumberRaw(const char **const json, char *const destination, 
     }
 
     // Parse integer
-    while (isdigit((int) *jsonCopy) != 0) {
+    while (isdigit((unsigned char) *jsonCopy) != 0) {
         jsonCopy++;
     }
 
     // Parse fraction
     if (*jsonCopy == '.') {
         jsonCopy++;
-        if (isdigit((int) *jsonCopy) == 0) {
+        if (isdigit((unsigned char) *jsonCopy) == 0) {
             return JsonResultInvalidNumberFormat; // decimal point must be followed by digit
         }
     }
-    while (isdigit((int) *jsonCopy) != 0) {
+    while (isdigit((unsigned char) *jsonCopy) != 0) {
         jsonCopy++;
     }
 
@@ -435,11 +435,11 @@ JsonResult JsonParseNumberRaw(const char **const json, char *const destination, 
         if ((*jsonCopy == '+') || (*jsonCopy == '-')) {
             jsonCopy++;
         }
-        if (isdigit((int) *jsonCopy) == 0) {
+        if (isdigit((unsigned char) *jsonCopy) == 0) {
             return JsonResultInvalidNumberFormat; // exponent must be followed by digit
         }
     }
-    while (isdigit((int) *jsonCopy) != 0) {
+    while (isdigit((unsigned char) *jsonCopy) != 0) {
         jsonCopy++;
     }
 
