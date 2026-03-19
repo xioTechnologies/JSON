@@ -595,8 +595,8 @@ static JsonResult ParseValue(const char **const json, const bool print, int *con
 }
 
 /**
- * @brief Parses an object and discards data. The JSON pointer is advanced to
- * the first character after the object.
+ * @brief Parses an object and discards the data. The JSON pointer is advanced
+ * to the first character after the object.
  * @param json JSON pointer.
  * @param print True to print.
  * @param indent Indent.
@@ -648,7 +648,7 @@ static JsonResult ParseObject(const char **const json, const bool print, int *co
 }
 
 /**
- * @brief Parses an array and discards data. The JSON pointer is advanced to
+ * @brief Parses an array and discards the data. The JSON pointer is advanced to
  * the first character after the array.
  * @param json JSON pointer.
  * @param print True to print.
