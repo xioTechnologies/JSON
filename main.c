@@ -840,7 +840,7 @@ static void TestParseDefinedObjectError(void) {
 static int CheckParseDefinedObjectError(const char *json, const JsonResult expectedError) {
     const char **const jsonPointer = &json;
     JsonResult result;
-    while (true) {
+    do {
         // {
         result = JsonParseObjectStart(jsonPointer);
         if (result != JsonResultOk) {
@@ -884,7 +884,7 @@ static int CheckParseDefinedObjectError(const char *json, const JsonResult expec
         if (result != JsonResultOk) {
             break;
         }
-    }
+    } while (false);
     if (result != expectedError) {
         return 1;
     }
