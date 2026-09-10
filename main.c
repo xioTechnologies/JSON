@@ -260,7 +260,7 @@ static int CheckParseString(const char *json, const char *const expectedString, 
 
 static void TestParseStringError(void) {
     Assert(CheckParseStringError("", JsonResultInvalidSyntax), "Parse string error invalid syntax");
-    Assert(CheckParseStringError("{", JsonResultUnexpectedType), "Parse string error unexpected type");
+    Assert(CheckParseStringError("{", JsonResultExpectedString), "Parse string error unexpected type");
     Assert(CheckParseStringError("\"0123456789ABCDEF\"", JsonResultStringTooLong), "Parse string error string too long");
     Assert(CheckParseStringError("\"abc", JsonResultMissingStringEnd), "Parse string error missing string end");
     Assert(CheckParseStringError("\"\x01\"", JsonResultInvalidStringCharacter), "Parse string error invalid character \\x01");
@@ -349,7 +349,7 @@ static int CheckParseNumber(const char *json, const float expectedNumber) {
 
 static void TestParseNumberError(void) {
     Assert(CheckParseNumberError("", JsonResultInvalidSyntax), "Parse number error invalid syntax");
-    Assert(CheckParseNumberError("{", JsonResultUnexpectedType), "Parse number error unexpected type");
+    Assert(CheckParseNumberError("{", JsonResultExpectedNumber), "Parse number error unexpected type");
     Assert(CheckParseNumberError("-", JsonResultInvalidNumberFormat), "Parse number error -");
     Assert(CheckParseNumberError("00", JsonResultInvalidNumberFormat), "Parse number error 00");
     Assert(CheckParseNumberError(".", JsonResultInvalidSyntax), "Parse number error .");
@@ -410,7 +410,7 @@ static int CheckParseBoolean(const char *json, const bool expectedBoolean) {
 
 static void TestParseBooleanError(void) {
     Assert(CheckParseBooleanError("", JsonResultInvalidSyntax), "Parse boolean error invalid syntax");
-    Assert(CheckParseBooleanError("{", JsonResultUnexpectedType), "Parse boolean error unexpected type");
+    Assert(CheckParseBooleanError("{", JsonResultExpectedBoolean), "Parse boolean error unexpected type");
     Assert(CheckParseBooleanError("t", JsonResultInvalidSyntax), "Parse boolean error t");
     Assert(CheckParseBooleanError("tr", JsonResultInvalidSyntax), "Parse boolean error tr");
     Assert(CheckParseBooleanError("tru", JsonResultInvalidSyntax), "Parse boolean error tru");
@@ -446,7 +446,7 @@ static int CheckParseNull(const char *json) {
 
 static void TestParseNullError(void) {
     Assert(CheckParseNullError("", JsonResultInvalidSyntax), "Parse null error invalid syntax");
-    Assert(CheckParseNullError("{", JsonResultUnexpectedType), "Parse null error unexpected type");
+    Assert(CheckParseNullError("{", JsonResultExpectedNull), "Parse null error unexpected type");
     Assert(CheckParseNullError("n", JsonResultInvalidSyntax), "Parse null error n");
     Assert(CheckParseNullError("nu", JsonResultInvalidSyntax), "Parse null error nu");
     Assert(CheckParseNullError("nul", JsonResultInvalidSyntax), "Parse null error nul");
@@ -828,11 +828,11 @@ static int CheckParseDefinedObjectOfAllTypes(const char *json) {
 }
 
 static void TestParseDefinedObjectError(void) {
-    Assert(CheckParseDefinedObjectError("\"a\":0,\"b\":[0]}", JsonResultUnexpectedType), "Parse defined object error missing object start");
+    Assert(CheckParseDefinedObjectError("\"a\":0,\"b\":[0]}", JsonResultExpectedObject), "Parse defined object error missing object start");
     Assert(CheckParseDefinedObjectError("{:0,\"b\":[0]}", JsonResultMissingKey), "Parse defined object error missing key");
     Assert(CheckParseDefinedObjectError("{\"a\"0,\"b\":[0]}", JsonResultMissingColon), "Parse defined object error missing colon");
     Assert(CheckParseDefinedObjectError("{\"a\":0\"b\":[0]}", JsonResultMissingComma), "Parse defined object error missing comma");
-    Assert(CheckParseDefinedObjectError("{\"a\":0,\"b\":0]}", JsonResultUnexpectedType), "Parse defined object error missing array start");
+    Assert(CheckParseDefinedObjectError("{\"a\":0,\"b\":0]}", JsonResultExpectedArray), "Parse defined object error missing array start");
     Assert(CheckParseDefinedObjectError("{\"a\":0,\"b\":[0}", JsonResultMissingArrayEnd), "Parse defined object error missing array end");
     Assert(CheckParseDefinedObjectError("{\"a\":0,\"b\":[0]", JsonResultMissingObjectEnd), "Parse defined object error missing object end");
 }
