@@ -759,7 +759,7 @@ const char *JsonResultToString(const JsonResult result) {
         case JsonResultUnableToParseNumber:
             return "Unable to parse number";
     }
-    return ""; // avoid compiler warning
+    return ""; // unreachable code: -Werror=switch
 }
 
 //------------------------------------------------------------------------------
